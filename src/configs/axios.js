@@ -11,6 +11,7 @@ instance.interceptors.request.use(
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
+
     return config;
   },
   (error) => {
@@ -19,16 +20,16 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-  (res) => res,
-  async (err) => {
-    const originalRequest = err.config;
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
 
-    if (err.response.status === 401) {
+    if (error.response.status === 401) {
       if (originalRequest._retry) {
-        return Promise.reject(err);
+        return Promise.reject(error);
       }
-
-      originalRequest._retry = true;
 
       try {
         const response = await instance.get('auth/refresh', { _retry: true });

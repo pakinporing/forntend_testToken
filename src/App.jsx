@@ -14,18 +14,12 @@ export default function App() {
 
   const handleSummit = async () => {
     try {
-      const result = await axios.post(
-        'auth/login',
-        {
-          email: inputValue.username,
-          password: inputValue.password
-          //   email: 'pakinpor1@gmail.com',
-          //   password: '123456'
-        },
-        {
-          //   withCredentials: true
-        }
-      );
+      const result = await axios.post('http://localhost:8888/api/auth/login', {
+        email: inputValue.username,
+        password: inputValue.password
+        //   email: 'pakinporing@gmail.com',
+        //   password: '123456'
+      });
       const token = result.data.accessToken;
 
       localStorage.setItem('accessToken', token);
@@ -36,16 +30,10 @@ export default function App() {
 
   const handleRegister = async (event) => {
     try {
-      const result = await axios.post(
-        'auth/register',
-        {
-          email: 'pakinpor3@gmail.com',
-          password: '123456'
-        },
-        {
-          //   withCredentials: true
-        }
-      );
+      await axios.post('auth/register', {
+        email: 'pakinpor3@gmail.com',
+        password: '123456'
+      });
     } catch (error) {
       console.error('Error:', error);
     }
@@ -53,10 +41,10 @@ export default function App() {
 
   const test = async () => {
     try {
-      const res = await axios.get('test/testToken');
+      const res = await axios.get('http://localhost:8888/test-auth');
     } catch (error) {
       console.log(error);
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         alert('Token expired, please login again.');
       }
     }
